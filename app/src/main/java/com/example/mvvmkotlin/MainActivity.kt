@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         infoRespority = InfoRespority()
         infoFactory = InfoFactory(infoRespority)
         infoViewModel = ViewModelProviders.of(this,infoFactory).get(InfoViewModel::class.java)
-
+        //按鈕向viewModel請求
         btn.setOnClickListener{
             val dialog = ProgressDialog.show(
                 this,"",
