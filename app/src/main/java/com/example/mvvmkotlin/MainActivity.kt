@@ -9,13 +9,19 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import io.reactivex.internal.schedulers.RxThreadFactory
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var infoViewModel: InfoViewModel
     private lateinit var infoRespority: InfoRespority
-    private lateinit var infoFactory: InfoFactory
-    private lateinit var btn:Button
+    private val infoFactory: InfoFactory by lazy {
+        InfoFactory(infoRespority)
+    }
+    private lateinit var btn: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,18 +30,24 @@ class MainActivity : AppCompatActivity() {
 
         btn = findViewById(com.example.mvvmkotlin.R.id.button)
         infoRespority = InfoRespority()
-        infoFactory = InfoFactory(infoRespority)
-        infoViewModel = ViewModelProviders.of(this,infoFactory).get(InfoViewModel::class.java)
+        val dialog = ProgressDialog(this)
 
-        btn.setOnClickListener{
-            val dialog = ProgressDialog.show(
-                this,"",
-                "Loading Please wait ..."
-            )
+        infoViewModel = ViewModelProviders.of(this, infoFactory).get(InfoViewModel::class.java)
+//        infoViewModel.userInfoLiveData.observe(this, Observer {
+//            dialog.dismiss()
+//            Toast.makeText(this,"user UserId :${it.get(0).getUserId()} user title ${it.get(0).gettitle()}",Toast.LENGTH_SHORT).show()
+//        })
+        btn.setOnClickListener {
+
             dialog.show()
+
             infoViewModel.callInfo().observe(this, Observer {
                 dialog.dismiss()
-                Toast.makeText(this,"user name :${it.userNamed} user age ${it.userAge}",Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "user UserId :${it.get(0).getUserId()} user title ${it.get(0).gettitle()}",
+                    Toast.LENGTH_SHORT
+                ).show()
             })
         }
     }
