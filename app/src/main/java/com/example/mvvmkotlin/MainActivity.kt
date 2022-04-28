@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var infoViewModel: InfoViewModel
     private lateinit var infoRespority: InfoRespority
+    //用到才會進(實例)
     private val infoFactory: InfoFactory by lazy {
         InfoFactory(infoRespority)
     }
