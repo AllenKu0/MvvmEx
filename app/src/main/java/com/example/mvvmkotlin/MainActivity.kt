@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
 class MainActivity : AppCompatActivity() {
-
+    //延遲初始化
     private lateinit var infoViewModel: InfoViewModel
     private lateinit var infoRespority: InfoRespority
     private lateinit var infoFactory: InfoFactory
